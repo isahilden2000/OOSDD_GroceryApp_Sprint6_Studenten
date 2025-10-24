@@ -1,9 +1,11 @@
-﻿using Grocery.Core.Models;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using Grocery.Core.Models;
 
 namespace Grocery.App.ViewModels
 {
     public partial class GlobalViewModel : BaseViewModel
     {
-        public Client Client { get; set; }
+        [ObservableProperty]
+        Client client;
     }
 }

@@ -7,5 +7,7 @@ namespace Grocery.Core.Interfaces.Repositories
         public ProductCategory Add(ProductCategory item);
 
         public List<ProductCategory> GetAll();
+
+        public ProductCategory? Delete(ProductCategory item);
     }
 }

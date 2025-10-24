@@ -1,5 +1,4 @@
-﻿
-using Grocery.Core.Interfaces.Repositories;
+﻿using Grocery.Core.Interfaces.Repositories;
 using Grocery.Core.Interfaces.Services;
 using Grocery.Core.Models;
 
@@ -41,6 +40,11 @@ namespace Grocery.Core.Services
         public List<ProductCategory> GetAllOnCategoryId(int id)
         {
             return _productCategoriesRepository.GetAll().Where(p => p.CategoryId == id).ToList();
+        }
+
+        public ProductCategory? Delete(ProductCategory item)
+        {
+            return _productCategoriesRepository.Delete(item);
         }
     }
 }
