@@ -1,5 +1,4 @@
-﻿
-using Grocery.Core.Models;
+﻿using Grocery.Core.Models;
 
 namespace Grocery.Core.Interfaces.Services
 {
@@ -10,5 +9,7 @@ namespace Grocery.Core.Interfaces.Services
         public List<ProductCategory> GetAll();
 
         public List<ProductCategory> GetAllOnCategoryId(int id);
+
+        public ProductCategory? Delete(ProductCategory item);
     }
 }

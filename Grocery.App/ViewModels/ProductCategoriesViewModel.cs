@@ -1,5 +1,4 @@
-﻿
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Grocery.Core.Interfaces.Services;
 using Grocery.Core.Models;
@@ -12,18 +11,32 @@ namespace Grocery.App.ViewModels
     {
         private readonly IProductCategoryService _productCategoryService;
         private readonly IProductService _productService;
+        private readonly GlobalViewModel _global;
         private string searchText = "";
-        public ObservableCollection<ProductCategory> ProductCategories { get; set; } = [];
-        public ObservableCollection<Product> AvailableProducts { get; set; } = [];
+        public ObservableCollection<ProductCategory> ProductCategories { get; set; } = new();
+        public ObservableCollection<Product> AvailableProducts { get; set; } = new();
 
         [ObservableProperty]
         Category category;
 
+        [ObservableProperty]
+        bool isAdmin;
 
-        public ProductCategoriesViewModel(IProductCategoryService productCategoryService, IProductService productService)
+        public ProductCategoriesViewModel(IProductCategoryService productCategoryService, IProductService productService, GlobalViewModel global)
         {
             _productCategoryService = productCategoryService;
             _productService = productService;
+            _global = global;
+            UpdateIsAdmin();
+            _global.PropertyChanged += (s, e) =>
+            {
+                if (e.PropertyName == nameof(GlobalViewModel.Client)) UpdateIsAdmin();
+            };
+        }
+
+        private void UpdateIsAdmin()
+        {
+            IsAdmin = _global.Client != null && _global.Client.Role == Role.Admin;
         }
 
         partial void OnCategoryChanged(Category? oldValue, Category newValue)
@@ -59,6 +72,16 @@ namespace Grocery.App.ViewModels
         {
             this.searchText = searchText;
             GetAvailableProducts();
+        }
+
+        [RelayCommand]
+        public void DeleteProductCategory(ProductCategory pc)
+        {
+            if (pc == null) return;
+            if (!IsAdmin) return;
+            _productCategoryService.Delete(pc);
+            // refresh lists
+            OnCategoryChanged(null, Category);
         }
     }
 }

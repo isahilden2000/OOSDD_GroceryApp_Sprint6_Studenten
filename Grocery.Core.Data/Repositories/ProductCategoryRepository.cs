@@ -27,5 +27,16 @@ namespace Grocery.Core.Data.Repositories
         {
             return productCategories;
         }
+
+        public ProductCategory? Delete(ProductCategory item)
+        {
+            var existing = productCategories.FirstOrDefault(pc => pc.ProductId == item.ProductId && pc.CategoryId == item.CategoryId);
+            if (existing != null)
+            {
+                productCategories.Remove(existing);
+                return existing;
+            }
+            return null;
+        }
     }
 }
